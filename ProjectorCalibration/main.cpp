@@ -166,7 +166,7 @@ int main(int argc, char **argv){
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// calcurate camera intrinsic parameter
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	std::vector<int> tnk;
+	std::vector<int> t_misspoint;
 	int flag = 0;
 	for (int i = 0; i < img_num; i++){
 		imagePoints1[i].clear();
@@ -188,7 +188,7 @@ int main(int argc, char **argv){
 		}
 		else{
 			cout << "Fail: " << i << endl;
-			tnk.push_back(i);
+			t_misspoint.push_back(i);
 		}
 	}
 	if (flag == 0) return 0;
@@ -208,17 +208,17 @@ int main(int argc, char **argv){
 	}
 
 	// lost 
-	for (int ii = tnk.size() - 1; ii >= 0; ii--){
-		int are = tnk[ii];
+	for (int ii = t_misspoint.size() - 1; ii >= 0; ii--){
+		int are = t_misspoint[ii];
 		std::vector<std::vector<cv::Point2f>>::iterator unkite = imagePoints1.begin() + are;
 		imagePoints1.erase(unkite);
 	}
-	for (int ii = tnk.size() - 1; ii >= 0; ii--){
-		int are = tnk[ii];
+	for (int ii = t_misspoint.size() - 1; ii >= 0; ii--){
+		int are = t_misspoint[ii];
 		std::vector<std::vector<cv::Point3f>>::iterator unkite = worldPoints1.begin() + are;
 		worldPoints1.erase(unkite);
 	}
-	img_num -= tnk.size();
+	img_num -= t_misspoint.size();
 
 
 	// camera parameter
@@ -263,7 +263,7 @@ int main(int argc, char **argv){
 	wfs << "aspect_Ratio" << aspectRatio;
 	wfs.release();
 
-	img_num += tnk.size();
+	img_num += t_misspoint.size();
 	std::cout << "Finish Output Xml File" << std::endl;
 #endif
 
