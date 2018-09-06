@@ -14,7 +14,7 @@
 
 // opencv include & liblary
 #include <opencv2/opencv.hpp>
-#include <opencv2/opencv_lib.hpp>
+//#include <opencv2/opencv_lib.hpp>
 
 class CameraClass{
 
@@ -58,6 +58,7 @@ public:
 		prop.type = FlyCapture2::FRAME_RATE;
 		float anan = 1000.0 / shutter;
 		if (anan > 60.0)anan = 60.0;
+		anan = 15;
 		prop.absValue = anan;
 		_camera.SetProperty(&prop);
 		// white balance
