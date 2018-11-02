@@ -13,7 +13,8 @@ int main(int argc, char **argv){
 
 	// camera init
 	CameraClass *camera = new CameraClass();
-	camera->Initialize(camera_width, camera_height, 4, 760, 600, 1, 0);
+	//camera->Initialize(camera_width, camera_height, 4, 624, 737, 0, 0);
+	camera->Initialize(camera_width, camera_height, 32.516, 604, 839, 1, 0);
 
 	// initialize Mat
 	cv::Mat cap_img = cv::Mat::zeros(camera_height, camera_width, CV_8UC3);
@@ -62,7 +63,7 @@ int main(int argc, char **argv){
 
 		// capture
 		cap_img = camera->Capture(camera_width, camera_height);
-		cv::flip(cap_img, cap_img, 1);
+		//cv::flip(cap_img, cap_img, 1);
 		cv::Mat temp;
 		cv::resize(cap_img, temp, cv::Size(), 640.0 / (double)camera_width, 480.0 / (double)camera_height);
 		cv::imshow("c:save, q:next, asdw:translate, zx:size", temp);
@@ -85,7 +86,7 @@ int main(int argc, char **argv){
 
 			// capture
 			cap_img = camera->Capture(camera_width, camera_height);
-			cv::flip(cap_img, cap_img, 1);
+			//cv::flip(cap_img, cap_img, 1);
 
 			cv::imwrite(saveName2, cap_img);
 
@@ -171,14 +172,14 @@ int main(int argc, char **argv){
 	for (int i = 0; i < img_num; i++){
 		imagePoints1[i].clear();
 		cv::Mat tempimg = checkerImgs1[i].clone();
-		if (cv::findChessboardCorners(tempimg, patternSize, imagePoints1[i], CV_CALIB_CB_ADAPTIVE_THRESH)){
+		if (cv::findChessboardCorners(tempimg, patternSize, imagePoints1[i], cv::CALIB_CB_ADAPTIVE_THRESH)){
 			cout << "*********";
 			cout << " Success: " << i << endl;
 
 			// subpicel
 			cv::Mat gray;
-			cv::cvtColor(tempimg, gray, CV_BGR2GRAY);
-			cv::cornerSubPix(gray, imagePoints1[i], cv::Size(2, 2), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 10000, 0.001));
+			cv::cvtColor(tempimg, gray, cv::COLOR_BGR2GRAY);
+			cv::cornerSubPix(gray, imagePoints1[i], cv::Size(2, 2), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 10000, 0.001));
 
 			flag++;
 			// render
@@ -241,7 +242,7 @@ int main(int argc, char **argv){
 	double apertureWidth = 0, apertureHeight = 0;						// apeature
 	double fovx = 0, fovy = 0;											// angle of view [deg]
 	double focalLength = 0;												// focal length [mm]
-	cv::Point2d principalPoint = (0, 0);								// focal length [pixel]
+	cv::Point2d principalPoint = cv::Point2d(0, 0);								// focal length [pixel]
 	double aspectRatio = 0;												// aspect ratio
 	std::cout << "Calc Camera Param" << std::endl;
 	cv::calibrationMatrixValues(cameraMatrix, checkerImgs1[0].size(), apertureWidth, apertureHeight,
@@ -293,13 +294,13 @@ int main(int argc, char **argv){
 		projectPoints[ii].clear();
 
 		cout << "CapWithoutPro -> ";
-		if (cv::findChessboardCorners(checkerImgs1[ii], patternSize, imagePoints1[ii], CV_CALIB_CB_ADAPTIVE_THRESH)){
+		if (cv::findChessboardCorners(checkerImgs1[ii], patternSize, imagePoints1[ii], cv::CALIB_CB_ADAPTIVE_THRESH)){
 			std::cout << " Success: " << ii << std::endl;
 
 			// subpicel
 			cv::Mat gray;
-			cv::cvtColor(checkerImgs1[ii], gray, CV_BGR2GRAY);
-			cv::cornerSubPix(gray, imagePoints1[ii], cv::Size(5, 5), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 10000, 0.001));
+			cv::cvtColor(checkerImgs1[ii], gray, cv::COLOR_BGR2GRAY);
+			cv::cornerSubPix(gray, imagePoints1[ii], cv::Size(5, 5), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 10000, 0.001));
 
 			flags[0]++;
 			// render
@@ -315,13 +316,13 @@ int main(int argc, char **argv){
 		}
 
 		cout << "CapWithPro -> ";
-		if (cv::findChessboardCorners(checkerImgs2[ii], patternSize, imagePoints2[ii], CV_CALIB_CB_ADAPTIVE_THRESH)){
+		if (cv::findChessboardCorners(checkerImgs2[ii], patternSize, imagePoints2[ii], cv::CALIB_CB_ADAPTIVE_THRESH)){
 			std::cout << " Success: " << ii << std::endl;
 
 			// subpicel
 			cv::Mat gray;
-			cv::cvtColor(checkerImgs2[ii], gray, CV_BGR2GRAY);
-			cv::cornerSubPix(gray, imagePoints2[ii], cv::Size(5, 5), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 10000, 0.001));
+			cv::cvtColor(checkerImgs2[ii], gray, cv::COLOR_BGR2GRAY);
+			cv::cornerSubPix(gray, imagePoints2[ii], cv::Size(5, 5), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 10000, 0.001));
 
 			flags[1]++;
 			// render
@@ -337,13 +338,13 @@ int main(int argc, char **argv){
 		}
 
 		cout << "Pro -> ";
-		if (cv::findChessboardCorners(projectImgs[ii], patternSize, projectPoints[ii], CV_CALIB_CB_ADAPTIVE_THRESH)){
+		if (cv::findChessboardCorners(projectImgs[ii], patternSize, projectPoints[ii], cv::CALIB_CB_ADAPTIVE_THRESH)){
 			std::cout << " Success: " << ii << std::endl;
 
 			// subpicel
 			cv::Mat gray;
-			cv::cvtColor(projectImgs[ii], gray, CV_BGR2GRAY);
-			cv::cornerSubPix(gray, projectPoints[ii], cv::Size(2, 2), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 10000, 0.001));
+			cv::cvtColor(projectImgs[ii], gray, cv::COLOR_BGR2GRAY);
+			cv::cornerSubPix(gray, projectPoints[ii], cv::Size(2, 2), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 10000, 0.001));
 
 			flags[2]++;
 			// render
@@ -448,7 +449,7 @@ int main(int argc, char **argv){
 	double pro_apertureWidth = 0, pro_apertureHeight = 0; 
 	double pro_fovx = 0, pro_fovy = 0;                                       
 	double pro_focalLength = 0;                                        
-	cv::Point2d pro_principalPoint = (0, 0);                         
+	cv::Point2d pro_principalPoint = cv::Point2d(0, 0);
 	double pro_aspectRatio = 0;                                           
 
 	cv::calibrationMatrixValues(pro_cameraMatrix, projectImgs[0].size(), pro_apertureWidth, pro_apertureHeight,
@@ -479,8 +480,8 @@ int main(int argc, char **argv){
 	cv::Mat R, T, E, F;
 	cv::TermCriteria criteria{ 10000, 10000, 0.0001 };
 	double tms = cv::stereoCalibrate(worldPoints2, imagePoints2, projectPoints, intrinsicv1, distortionv1,
-		pro_cameraMatrix, pro_distCoeffs, checkerImgs1[0].size(), R, T, E, F, criteria,
-		CV_CALIB_FIX_INTRINSIC/*CV_CALIB_USE_INTRINSIC_GUESS*//*CV_CALIB_FIX_ASPECT_RATIO*/);
+		pro_cameraMatrix, pro_distCoeffs, checkerImgs1[0].size(), R, T, E, F, 
+		cv::CALIB_FIX_INTRINSIC/*CV_CALIB_USE_INTRINSIC_GUESS*//*CV_CALIB_FIX_ASPECT_RATIO*/,criteria);
 	//printf("\n%f\n", tms);
 	//cout << R << "\n" << T << "\n\n";
 

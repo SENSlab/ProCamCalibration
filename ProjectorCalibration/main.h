@@ -7,7 +7,7 @@
 
 // opencv include & liblary
 #include <opencv2/opencv.hpp>
-#include <opencv2/opencv_lib.hpp>
+//#include <opencv2/opencv_lib.hpp>
 
 // camera class
 #include "camera_class.h"
@@ -27,10 +27,10 @@ using namespace std;
 int camera_width = 1280, camera_height = 960;
 
 // projector resolution 
-int window_width = 1280, window_height = 800;
+int window_width = 1280, window_height = 720;
 
 // projector position
-int init_window_posx = 1280, init_window_posy = 100;
+int init_window_posx = 1280, init_window_posy = 0;
 
 // file directory
 namespace
@@ -44,7 +44,7 @@ namespace
 }
 
 // checker config
-float checkSize = 114.0 / 5.0;
+float checkSize = 65/3;
 int checkPointX = 7, checkPointY = 10;
 
 // white color

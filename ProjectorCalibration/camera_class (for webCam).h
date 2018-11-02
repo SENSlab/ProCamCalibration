@@ -17,7 +17,7 @@
 class CameraClass{
 
 private:
-	cv::VeideoCapture cap;
+	cv::VideoCapture cap;
 public:
 	CameraClass(void){};
 	~CameraClass(void){};
